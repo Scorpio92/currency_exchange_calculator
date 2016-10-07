@@ -1,0 +1,20 @@
+<resources>
+
+
+
+    <style name="ButtonStyle" parent="android:Widget.Button">
+        <item name="android:minHeight">30dp</item>
+        <item name="android:background">@drawable/custom_button_style</item>
+    </style>
+
+    <style name="ButtonStyle_right_0dp_round" parent="android:Widget.Button">
+        <item name="android:minHeight">30dp</item>
+        <item name="android:background">@drawable/custom_button_style_right_0dp_round</item>
+    </style>
+
+    <style name="ButtonStyle_left_0dp_round" parent="android:Widget.Button">
+        <item name="android:minHeight">30dp</item>
+        <item name="android:background">@drawable/custom_button_style_left_0dp_round</item>
+    </style>
+
+</resources>
