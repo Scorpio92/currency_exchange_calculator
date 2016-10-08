@@ -18,7 +18,7 @@
         android:id="@+id/topTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Выберите операцию и валюту"
+        android:text="@string/topTitle"
         android:layout_centerHorizontal="true"/>
 
     <TableLayout
@@ -66,7 +66,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="RUB" />
+                            />
 
                     </TableRow>
 
@@ -114,7 +114,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="USD" />
+                            />
 
                     </TableRow>
 
@@ -140,7 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Продажа"
+                android:text="@string/purchaseButtonText"
                 style="@style/ButtonStyle_right_0dp_round" />
 
             <Button
@@ -148,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Покупка"
+                android:text="@string/saleButtonText"
                 style="@style/ButtonStyle_left_0dp_round" />
 
             <Space
@@ -171,7 +171,7 @@
                 android:id="@+id/exchangeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Курс валют на 07.10.16" />
+                android:text="@string/exchangeTitle" />
 
         </TableRow>
 
@@ -183,14 +183,13 @@
 
             <TextView
                 android:layout_weight="1"
-                android:text="USD"
+                android:text="@string/currency_usd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
 
             <TextView
                 android:layout_weight="1"
                 android:id="@+id/usdSale"
-                android:text="50"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal" />
@@ -198,7 +197,6 @@
             <TextView
                 android:layout_weight="1"
                 android:id="@+id/usdPurchase"
-                android:text="60"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal" />
@@ -217,14 +215,13 @@
             android:paddingTop="20dp">
 
             <TextView
-                android:text="EUR"
+                android:text="@string/currency_eur"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/eurSale"
-                android:text="70"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -232,7 +229,6 @@
 
             <TextView
                 android:id="@+id/eurPurchase"
-                android:text="80"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -252,14 +248,13 @@
             android:paddingTop="20dp">
 
             <TextView
-                android:text="CNY"
+                android:text="@string/currency_cny"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/cnySale"
-                android:text="100"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -267,7 +262,39 @@
 
             <TextView
                 android:id="@+id/cnyPurchase"
-                android:text="120"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1" />
+
+            <Space
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:text="@string/currency_jpy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/jpySale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/jpyPurchase"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"

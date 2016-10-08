@@ -17,4 +17,16 @@
         <item name="android:background">@drawable/custom_button_style_left_0dp_round</item>
     </style>
 
+    <!--<style name="PopupMenuStyle" parent="android:Widget.PopupMenu">
+        <item name="android:itemBackground">@drawable/custom_dropdown_row_selector</item>
+        <item name="android:popup">@android:color/black</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>-->
+
+    <style name="DropDownListViewStyle" parent="@android:style/Widget.ListView">
+        <item name="android:listSelector">@drawable/custom_dropdown_row_selector</item>
+        <item name="android:divider">@android:color/black</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
 </resources>

@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.PopupMenu;
 
 public class MainActivity extends AppCompatActivity {
 
+    Button currencyButton1;
+    Button currencyButton2;
     Button purchaseButton;
     Button saleButton;
 
@@ -32,6 +35,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+
+        //кнопки выбора курса валют, всплывающее меню для кнопок выбора курса валют
+        currencyButton1 = (Button) findViewById(R.id.currencyButton1);
+        currencyButton2 = (Button) findViewById(R.id.currencyButton2);
+
+        currencyButton1.setText(getString(R.string.currency_rub));
+        currencyButton2.setText(getString(R.string.currency_usd));
+
+        currencyButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCurrency(view, currencyButton2);
+            }
+        });
+
+        currencyButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setCurrency(view, currencyButton1);
+            }
+        });
+
+
+
+        //кнопки продажа/покупка
         purchaseButton = (Button) findViewById(R.id.purchaseButton);
         saleButton = (Button) findViewById(R.id.saleButton);
         saleButton.setBackground(getResources().getDrawable(R.drawable.button_pressed_left_0dp_round));
@@ -71,5 +99,55 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    //PopupMenu курса валют
+    private void setCurrency(final View currentButtonView, final Button anotherButton) {
+        PopupMenu popupMenu = new PopupMenu(MainActivity.this, currentButtonView);
+        popupMenu.inflate(R.menu.currency_list);
+        //Menu menu = popupMenu.getMenu();
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                /*switch (item.getItemId()) {
+
+                    case R.id.currency_list_rub:
+                        ((Button) view).setText(getString(R.string.currency_rub));
+                        return true;
+
+                    case R.id.currency_list_usd:
+                        ((Button) view).setText(getString(R.string.currency_usd));
+                        return true;
+
+                    case R.id.currency_list_eur:
+                        ((Button) view).setText(getString(R.string.currency_eur));
+                        return true;
+
+                    case R.id.currency_list_cny:
+                        ((Button) view).setText(getString(R.string.currency_cny));
+                        return true;
+
+                    case R.id.currency_list_jpy:
+                        ((Button) view).setText(getString(R.string.currency_jpy));
+                        return true;
+
+                    default:
+                        return false;
+                }*/
+                Button currentButton = (Button) currentButtonView;
+                //если выбраны одинаковые валюты, меняем их местами
+                if(item.getTitle().equals(anotherButton.getText())) {
+                    anotherButton.setText(currentButton.getText());
+                    currentButton.setText(item.getTitle());
+                } else {
+                    currentButton.setText(item.getTitle());
+                }
+                return true;
+            }
+        });
+
+        popupMenu.show();
     }
 }
