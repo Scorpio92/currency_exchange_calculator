@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
-        <item
+        <!--<item
             android:id="@+id/currency_list_rub"
             android:title="@string/currency_rub"/>
         <item
@@ -15,6 +15,6 @@
             android:title="@string/currency_cny"/>
         <item
             android:id="@+id/currency_list_jpy"
-            android:title="@string/currency_jpy"/>
+            android:title="@string/currency_jpy"/>-->
     </group>
 </menu>

@@ -2,12 +2,8 @@
     <string name="app_name">excalc</string>
     <string name="action_settings">Settings</string>
     <string name="topTitle">Выберите операцию и валюту</string>
-    <string name="purchaseButtonText">Продажа</string>
-    <string name="saleButtonText">Покупка</string>
+    <string name="purchaseButtonText">Покупка</string>
+    <string name="saleButtonText">Продажа</string>
     <string name="exchangeTitle">Курс валют на 07.10.16</string>
-    <string name="currency_rub">RUB</string>
-    <string name="currency_usd">USD</string>
-    <string name="currency_eur">EUR</string>
-    <string name="currency_cny">CNY</string>
-    <string name="currency_jpy">JPY</string>
+    <string name="ooops">Что-то пошло не так...Выходим!</string>
 </resources>
