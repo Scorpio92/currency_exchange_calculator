@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.Space;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -28,16 +27,25 @@ public class MainActivity extends AppCompatActivity {
 
     EditText inputField1;
     EditText inputField2;
-    Button currencyButton1;
-    Button currencyButton2;
+    /*Button currencyButton1;
+    Button currencyButton2;*/
+    TextView currency1;
+    TextView currency2;
     Button purchaseButton;
     Button saleButton;
 
     final String selectAllCurrency = "SELECT * FROM " + MainDB.CURRENCY_EXCHANGE_TABLE;
-    int activeInputFieldID = -1;
-    int activeOperationID = -1;
-    String inputField1ExchangeCurrency;
-    String inputField2ExchangeCurrency;
+
+    int activeInputFieldID;
+    int activeOperation;
+    /*String inputField1ExchangeCurrency;
+    String inputField2ExchangeCurrency;*/
+    String activeExchangeCurrency;
+    int activeExchangeCurrencyButtonID;
+
+    ArrayList<Integer> currencyButtonsIDArray;
+    ArrayList<Integer> purchaseTextIDArray;
+    ArrayList<Integer> saleTextIDArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         inputField1 = (EditText) findViewById(R.id.inputField1);
         inputField2 = (EditText) findViewById(R.id.inputField2);
 
+        //ловим событие фокусировки на поле ввода - записываем Id поля
         inputField1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -109,17 +118,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //слушаем ввод
         inputField1.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
                 if(activeInputFieldID == inputField1.getId()) {
                     Log.w("TextWatcher", "inputField1 afterTextChanged " + s);
-                    if (s.length() > 0) {
-                        inputField2.setText(String.format("%(.4f", calc(activeOperationID, Double.parseDouble(s.toString().replace(",", ".")), inputField2ExchangeCurrency)));
+                    /*if (s.length() > 0) {
+                        inputField2.setText(String.format("%(." + Constants.SUM_ROUND + "f", calc(activeOperation, Double.parseDouble(s.toString().replace(",", ".")), activeExchangeCurrency)));
                     } else {
-                        inputField2.setText("0");
-                    }
+                        inputField2.setText("");
+                    }*/
+                    calc();
                 }
             }
 
@@ -141,11 +152,12 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if(activeInputFieldID == inputField2.getId()) {
                     Log.w("TextWatcher", "inputField2 afterTextChanged " + s);
-                    if (s.length() > 0) {
-                        inputField1.setText(String.format("%(.4f", calc(activeOperationID, Double.parseDouble(s.toString().replace(",", ".")), inputField1ExchangeCurrency)));
+                    /*if (s.length() > 0) {
+                        inputField1.setText(String.format("%(." + Constants.SUM_ROUND + "f", calc(activeOperation, Double.parseDouble(s.toString().replace(",", ".")), Constants.CURRENCY_RUB)));
                     } else {
-                        inputField1.setText("0");
-                    }
+                        inputField1.setText("");
+                    }*/
+                    calc();
                 }
             }
 
@@ -163,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //кнопки выбора курса валют, всплывающее меню для кнопок выбора курса валют
-        currencyButton1 = (Button) findViewById(R.id.currencyButton1);
+        /*currencyButton1 = (Button) findViewById(R.id.currencyButton1);
         currencyButton2 = (Button) findViewById(R.id.currencyButton2);
 
         currencyButton1.setText(Constants.CURRENCY_RUB);
@@ -183,31 +195,73 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 setInputCurrency(view, currencyButton1);
             }
-        });
+        });*/
+
+
+        //валюта
+        currency1 = (TextView) findViewById(R.id.currency1);
+        currency2 = (TextView) findViewById(R.id.currency2);
 
 
         //кнопки продажа/покупка
-        purchaseButton = (Button) findViewById(R.id.purchaseButton);
         saleButton = (Button) findViewById(R.id.saleButton);
-
-        //по-умолчанию - операция покупка
-        purchaseButton.setBackground(getResources().getDrawable(R.drawable.button_pressed_left_0dp_round));
-        activeOperationID = Constants.OPERATION_PURCHASE;
+        purchaseButton = (Button) findViewById(R.id.purchaseButton);
 
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saleButton.setBackground(getResources().getDrawable(R.drawable.button_pressed_left_0dp_round));
-                purchaseButton.setBackground(getResources().getDrawable(R.drawable.button_normal_right_0dp_round));
+
+                currency1.setText(activeExchangeCurrency);
+                currency2.setText(Constants.CURRENCY_RUB);
+
+                activeOperation = Constants.OPERATION_SALE;
+                saleButton.setTextColor(getResources().getColor(R.color.colorTextLight));
+                purchaseButton.setTextColor(getResources().getColor(R.color.colorTextNormal));
+                saleButton.setBackground(getResources().getDrawable(R.drawable.button_pressed_right_0dp_round));
+                purchaseButton.setBackground(getResources().getDrawable(R.drawable.button_normal_left_0dp_round));
+
+                //выделяем курсы валют цветом
+                try {
+                    for (int id : saleTextIDArray) {
+                        TextView t = (TextView) MainActivity.this.findViewById(id);
+                        t.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    }
+                    for (int id : purchaseTextIDArray) {
+                        TextView t = (TextView) MainActivity.this.findViewById(id);
+                        t.setTextColor(getResources().getColor(R.color.colorTextDark));
+                    }
+                } catch (Exception e) {e.printStackTrace();}
+                calc();
             }
         });
         purchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                purchaseButton.setBackground(getResources().getDrawable(R.drawable.button_pressed_right_0dp_round));
-                saleButton.setBackground(getResources().getDrawable(R.drawable.button_normal_left_0dp_round));
+
+                currency1.setText(Constants.CURRENCY_RUB);
+                currency2.setText(activeExchangeCurrency);
+
+                activeOperation = Constants.OPERATION_PURCHASE;
+                purchaseButton.setTextColor(getResources().getColor(R.color.colorTextLight));
+                saleButton.setTextColor(getResources().getColor(R.color.colorTextNormal));
+                purchaseButton.setBackground(getResources().getDrawable(R.drawable.button_pressed_left_0dp_round));
+                saleButton.setBackground(getResources().getDrawable(R.drawable.button_normal_right_0dp_round));
+
+                //выделяем курсы валют цветом
+                try {
+                    for (int id : purchaseTextIDArray) {
+                        TextView t = (TextView) MainActivity.this.findViewById(id);
+                        t.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    }
+                    for (int id : saleTextIDArray) {
+                        TextView t = (TextView) MainActivity.this.findViewById(id);
+                        t.setTextColor(getResources().getColor(R.color.colorTextDark));
+                    }
+                } catch (Exception e) {e.printStackTrace();}
+                calc();
             }
         });
+
 
         ///DB
         if(!initDB()) {
@@ -221,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
         ///тут берем значения из БД и вставляем в GUI
         createCurrencyTable();
 
+        setDefaults();
     }
 
     //проверка и создание при необходимости БД приложения
@@ -290,6 +345,10 @@ public class MainActivity extends AppCompatActivity {
 
             TableLayout tl = (TableLayout) findViewById(R.id.baseTable);
 
+            currencyButtonsIDArray = new ArrayList<>();
+            purchaseTextIDArray = new ArrayList<>();
+            saleTextIDArray = new ArrayList<>();
+
             for(int i=0; i<result.size(); i=i+3) {
                 TableRow tr = new TableRow(this);
                 TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
@@ -297,22 +356,65 @@ public class MainActivity extends AppCompatActivity {
                 tr.setGravity(Gravity.CENTER_HORIZONTAL);
                 tr.setPadding(0, 20, 0, 0);
 
-                TextView currency = new TextView(this);
+                /*TextView currency = new TextView(this);
                 currency.setText(result.get(i));
+                currency.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+                tr.addView(currency);*/
+
+                //ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(this, R.style.ButtonStyle);
+                final Button currency = new Button(this);
+                currency.setText(result.get(i));
+                currency.setBackgroundResource(R.drawable.custom_button_style);
+                //currency.setTextAppearance(this,R.style.ButtonStyle);
+                //currency.setMinHeight(10);
+                //currency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                currency.setId(i);
+                currencyButtonsIDArray.add(i);
+                if(result.get(i).equals(Constants.CURRENCY_DEFAULT))
+                    activeExchangeCurrencyButtonID = i;
                 currency.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
                 tr.addView(currency);
 
-                TextView purchase = new TextView(this);
-                purchase.setText(result.get(i+1));
-                purchase.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-                purchase.setGravity(Gravity.CENTER_HORIZONTAL);
-                tr.addView(purchase);
+                currency.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        activeExchangeCurrency = ((Button) view).getText().toString();
+
+                        if(activeOperation == Constants.OPERATION_PURCHASE) {
+                            currency1.setText(Constants.CURRENCY_RUB);
+                            currency2.setText(activeExchangeCurrency);
+                        } else {
+                            currency1.setText(activeExchangeCurrency);
+                            currency2.setText(Constants.CURRENCY_RUB);
+                        }
+
+                        for (int id: currencyButtonsIDArray) {
+                            Button b = (Button) MainActivity.this.findViewById(id);
+                            b.setTextColor(getResources().getColor(R.color.colorTextNormal));
+                            b.setBackgroundResource(R.drawable.button_normal);
+                        }
+                        currency.setTextColor(getResources().getColor(R.color.colorTextLight));
+                        currency.setBackgroundResource(R.drawable.button_pressed);
+                        calc();
+                        //Toast.makeText(getApplicationContext(), activeExchangeCurrency, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
                 TextView sale = new TextView(this);
-                sale.setText(result.get(i+2));
+                sale.setText(result.get(i+1));
+                sale.setId(i + result.size()*2);
+                saleTextIDArray.add(i + result.size()*2);
                 sale.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
                 sale.setGravity(Gravity.CENTER_HORIZONTAL);
                 tr.addView(sale);
+
+                TextView purchase = new TextView(this);
+                purchase.setText(result.get(i+2));
+                purchase.setId(i + result.size());
+                purchaseTextIDArray.add(i + result.size());
+                purchase.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+                purchase.setGravity(Gravity.CENTER_HORIZONTAL);
+                tr.addView(purchase);
 
                 Space space = new Space(this);
                 space.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
@@ -328,79 +430,105 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    //PopupMenu курса валют
-    void setInputCurrency(final View currentButtonView, final Button anotherButton) {
-        PopupMenu popupMenu = new PopupMenu(MainActivity.this, currentButtonView);
-        popupMenu.inflate(R.menu.currency_list);
-        Menu menu = popupMenu.getMenu();
+    //расчет курса обмена
+    //double calc(int operation, double sum, String currency) {
+    void calc() {
+        //String currency;
+        double sum;
+        double resultSum = -1;
 
-        ArrayList<String> als = new ArrayList<String>();
-        als.add(MainDB.CURRENCY_EXCHANGE_TABLE_CURRENCY_COLUMN);
-        ArrayList<String> result = DBUtils.select_from_db(MainActivity.this, selectAllCurrency, als, true);
-
-        for (String item:result) {
-            menu.add(item);
+        try {
+            //NumberFormat format = NumberFormat.getInstance(Locale.ENGLISH);
+            if (activeInputFieldID == inputField1.getId()) {
+                //Number number = format.parse(inputField1.getText().toString());
+                //sum = number.doubleValue();
+                sum = Double.parseDouble(inputField1.getText().toString());
+            } else {
+                //Number number = format.parse(inputField2.getText().toString());
+                //sum = number.doubleValue();
+                sum = Double.parseDouble(inputField2.getText().toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
         }
 
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Button currentButton = (Button) currentButtonView;
-                //если выбраны одинаковые валюты, меняем их местами
-                if(item.getTitle().equals(anotherButton.getText())) {
-                    anotherButton.setText(currentButton.getText());
-                }
-                currentButton.setText(item.getTitle());
-                if(currentButton.getId() == currencyButton1.getId()) {
-                    inputField1ExchangeCurrency = item.getTitle().toString();
-                } else {
-                    inputField2ExchangeCurrency = item.getTitle().toString();
-                }
-
-                return true;
-            }
-        });
-
-        popupMenu.show();
-    }
-
-    void sendToCalc() {
-
-    }
-
-    //расчет курса обмена
-    double calc(int operation, double sum, String currency) {
-        double resultSum = -1;
-        String query = selectAllCurrency + " WHERE " + MainDB.CURRENCY_EXCHANGE_TABLE_CURRENCY_COLUMN + "=" + "'" + currency + "'";
+        String query = selectAllCurrency + " WHERE " + MainDB.CURRENCY_EXCHANGE_TABLE_CURRENCY_COLUMN + "=" + "'" + activeExchangeCurrency + "'";
         ArrayList<String> result;
         try {
             ArrayList<String> als = new ArrayList<String>();
 
-            switch (operation) {
+            switch (activeOperation) {
                 case Constants.OPERATION_PURCHASE:
                     als.add(MainDB.CURRENCY_EXCHANGE_TABLE_SALE_COLUMN);
                     result = DBUtils.select_from_db(MainActivity.this, query, als, true);
-                    Log.w("calc", "OPERATION_SALE: currency: " + currency + " rate: " + result.get(0));
-                    if (currency.equals(Constants.CURRENCY_RUB)) {
-                        resultSum = sum*Double.parseDouble(result.get(0));
-                    } else {
+                    Log.w("calc", "OPERATION_PURCHASE: currency: " + activeExchangeCurrency + " rate: " + result.get(0));
+                    if (activeInputFieldID == inputField1.getId()) {
                         resultSum = sum/Double.parseDouble(result.get(0));
+                    } else {
+                        resultSum = sum*Double.parseDouble(result.get(0));
                     }
                     break;
                 case Constants.OPERATION_SALE:
                     als.add(MainDB.CURRENCY_EXCHANGE_TABLE_PURCHASE_COLUMN);
                     result = DBUtils.select_from_db(MainActivity.this, query, als, true);
-                    Log.w("calc", "OPERATION_PURCHASE: currency: " + currency + " rate: " + result.get(0));
-                    if (currency.equals(Constants.CURRENCY_RUB)) {
+                    Log.w("calc", "OPERATION_SALE: currency: " + activeExchangeCurrency + " rate: " + result.get(0));
+                    if (activeInputFieldID == inputField1.getId()) {
                         resultSum = sum*Double.parseDouble(result.get(0));
                     } else {
                         resultSum = sum/Double.parseDouble(result.get(0));
                     }
                     break;
             }
+
+            if(activeExchangeCurrency.equals(Constants.CURRENCY_CNY)) {
+                if(activeOperation == Constants.OPERATION_PURCHASE) {
+                    resultSum *= 10;
+                } else {
+                    resultSum /= 10;
+                }
+            }
+
+            if (activeInputFieldID == inputField1.getId()) {
+                inputField2.setText(String.format("%(." + Constants.SUM_ROUND + "f", resultSum).replace(",", "."));
+            } else {
+                inputField1.setText(String.format("%(." + Constants.SUM_ROUND + "f", resultSum).replace(",", "."));
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return resultSum;
+        //return resultSum;
+    }
+
+    void setDefaults() {
+
+        currency1.setText(Constants.CURRENCY_RUB);
+        currency2.setText(Constants.CURRENCY_DEFAULT);
+
+        //по-умолчанию - операция покупка
+        purchaseButton.setTextColor(getResources().getColor(R.color.colorTextLight));
+        purchaseButton.setBackground(getResources().getDrawable(R.drawable.button_pressed_left_0dp_round));
+        activeOperation = Constants.OPERATION_PURCHASE;
+        //выделяем курсы валют цветом
+        try {
+            for (int id : purchaseTextIDArray) {
+                TextView t = (TextView) MainActivity.this.findViewById(id);
+                t.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
+            for (int id : saleTextIDArray) {
+                TextView t = (TextView) MainActivity.this.findViewById(id);
+                t.setTextColor(getResources().getColor(R.color.colorTextDark));
+            }
+        } catch (Exception e) {e.printStackTrace();}
+
+        //валюта по-умолчанию
+        activeExchangeCurrency = Constants.CURRENCY_DEFAULT;
+
+        try {
+            Button b = (Button) findViewById(activeExchangeCurrencyButtonID);
+            b.setTextColor(getResources().getColor(R.color.colorTextLight));
+            b.setBackgroundResource(R.drawable.button_pressed);
+        } catch (Exception e) {e.printStackTrace();}
     }
 }
