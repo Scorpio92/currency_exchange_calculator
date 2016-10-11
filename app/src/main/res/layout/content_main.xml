@@ -18,8 +18,9 @@
         android:id="@+id/topTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="@string/topTitle"
-        android:layout_centerHorizontal="true"/>
+        android:textSize="@dimen/title_text_size" />
 
     <TableLayout
         android:id="@+id/baseTable"
@@ -50,26 +51,24 @@
                             android:id="@+id/inputField1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
+                            android:gravity="center_vertical|center_horizontal"
                             android:inputType="numberDecimal" />
 
                     </TableRow>
 
                     <TableRow
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="start">
-
-                        <!--<Button
-                            android:id="@+id/currencyButton1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />-->
+                        android:layout_height="wrap_content">
 
                         <TextView
                             android:id="@+id/currency1"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal" />
 
                     </TableRow>
 
@@ -78,28 +77,12 @@
             </LinearLayout>
 
 
-            <!--<EditText
-                android:id="@+id/inputField1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="numberDecimal" />-->
-
-
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/ic_drag_handle_black_36dp" />
-
-
-            <!--<EditText
-                android:id="@+id/inputField2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="numberDecimal" />-->
 
 
             <LinearLayout
@@ -119,26 +102,24 @@
                             android:id="@+id/inputField2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
+                            android:gravity="center_vertical|center_horizontal"
                             android:inputType="numberDecimal" />
 
                     </TableRow>
 
                     <TableRow
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="start">
-
-                        <!--<Button
-                            android:id="@+id/currencyButton2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />-->
+                        android:layout_height="wrap_content">
 
                         <TextView
                             android:id="@+id/currency2"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal" />
 
                     </TableRow>
 
@@ -155,35 +136,32 @@
             android:paddingTop="20dp">
 
             <Space
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/saleButton"
+                style="@style/ButtonStyle_right_0dp_round"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/saleButtonText"
-                style="@style/ButtonStyle_right_0dp_round" />
+                android:text="@string/saleButtonText" />
 
             <Button
                 android:id="@+id/purchaseButton"
+                style="@style/ButtonStyle_left_0dp_round"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/purchaseButtonText"
-                style="@style/ButtonStyle_left_0dp_round" />
+                android:text="@string/purchaseButtonText" />
 
             <Space
-                android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
         </TableRow>
-
-
-
 
         <TableRow
             android:layout_width="wrap_content"
@@ -195,141 +173,10 @@
                 android:id="@+id/exchangeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/exchangeTitle" />
+                android:text="@string/exchangeTitle"
+                android:textSize="@dimen/title_text_size" />
 
         </TableRow>
-
-        <!--<TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingTop="20dp">
-
-            <TextView
-                android:layout_weight="1"
-                android:text="@string/currency_usd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_weight="1"
-                android:id="@+id/usdSale"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal" />
-
-            <TextView
-                android:layout_weight="1"
-                android:id="@+id/usdPurchase"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal" />
-
-            <Space
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingTop="20dp">
-
-            <TextView
-                android:text="@string/currency_eur"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/eurSale"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/eurPurchase"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_weight="1" />
-
-            <Space
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingTop="20dp">
-
-            <TextView
-                android:text="@string/currency_cny"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/cnySale"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/cnyPurchase"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_weight="1" />
-
-            <Space
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingTop="20dp">
-
-            <TextView
-                android:text="@string/currency_jpy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/jpySale"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/jpyPurchase"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_weight="1" />
-
-            <Space
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-        </TableRow>-->
 
     </TableLayout>
 

@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
@@ -125,11 +126,6 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if(activeInputFieldID == inputField1.getId()) {
                     Log.w("TextWatcher", "inputField1 afterTextChanged " + s);
-                    /*if (s.length() > 0) {
-                        inputField2.setText(String.format("%(." + Constants.SUM_ROUND + "f", calc(activeOperation, Double.parseDouble(s.toString().replace(",", ".")), activeExchangeCurrency)));
-                    } else {
-                        inputField2.setText("");
-                    }*/
                     calc();
                 }
             }
@@ -137,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //Log.w("TextWatcher", "inputField1 beforeTextChanged");
-                //activeInputFieldID = inputField1.getId();
             }
 
             @Override
@@ -152,11 +147,6 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if(activeInputFieldID == inputField2.getId()) {
                     Log.w("TextWatcher", "inputField2 afterTextChanged " + s);
-                    /*if (s.length() > 0) {
-                        inputField1.setText(String.format("%(." + Constants.SUM_ROUND + "f", calc(activeOperation, Double.parseDouble(s.toString().replace(",", ".")), Constants.CURRENCY_RUB)));
-                    } else {
-                        inputField1.setText("");
-                    }*/
                     calc();
                 }
             }
@@ -164,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //Log.w("TextWatcher", "inputField2 beforeTextChanged");
-                //activeInputFieldID = inputField2.getId();
             }
 
             @Override
@@ -172,31 +161,6 @@ public class MainActivity extends AppCompatActivity {
                 //Log.w("TextWatcher", "inputField2 onTextChanged");
             }
         });
-
-
-        //кнопки выбора курса валют, всплывающее меню для кнопок выбора курса валют
-        /*currencyButton1 = (Button) findViewById(R.id.currencyButton1);
-        currencyButton2 = (Button) findViewById(R.id.currencyButton2);
-
-        currencyButton1.setText(Constants.CURRENCY_RUB);
-        currencyButton2.setText(Constants.CURRENCY_USD);
-        inputField1ExchangeCurrency = Constants.CURRENCY_RUB;
-        inputField2ExchangeCurrency = Constants.CURRENCY_USD;
-
-        currencyButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setInputCurrency(view, currencyButton2);
-            }
-        });
-
-        currencyButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setInputCurrency(view, currencyButton1);
-            }
-        });*/
-
 
         //валюта
         currency1 = (TextView) findViewById(R.id.currency1);
@@ -356,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 tr.setGravity(Gravity.CENTER_HORIZONTAL);
                 tr.setPadding(0, 20, 0, 0);
 
+
                 /*TextView currency = new TextView(this);
                 currency.setText(result.get(i));
                 currency.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
@@ -373,6 +338,8 @@ public class MainActivity extends AppCompatActivity {
                 if(result.get(i).equals(Constants.CURRENCY_DEFAULT))
                     activeExchangeCurrencyButtonID = i;
                 currency.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+                //currency.setMinimumHeight((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, Constants.MIN_BUTTON_HEIGHT, getResources().getDisplayMetrics()));
+                //currency.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.MIN_BUTTON_TEXT_HEIGHT);
                 tr.addView(currency);
 
                 currency.setOnClickListener(new View.OnClickListener() {
@@ -527,8 +494,8 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             Button b = (Button) findViewById(activeExchangeCurrencyButtonID);
-            b.setTextColor(getResources().getColor(R.color.colorTextLight));
             b.setBackgroundResource(R.drawable.button_pressed);
+            b.setTextColor(getResources().getColor(R.color.colorTextLight));
         } catch (Exception e) {e.printStackTrace();}
     }
 }

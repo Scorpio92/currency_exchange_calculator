@@ -3,7 +3,8 @@
 
 
     <style name="ButtonStyle" parent="android:Widget.Button">
-        <item name="android:minHeight">30dp</item>
+        <item name="android:minHeight">@dimen/min_button_height</item>
+        <item name="android:textSize">@dimen/min_button_text_size</item>
         <item name="android:background">@drawable/custom_button_style</item>
     </style>
 
@@ -27,6 +28,10 @@
         <item name="android:listSelector">@drawable/custom_dropdown_row_selector</item>
         <item name="android:divider">@android:color/black</item>
         <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="TextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textSize">@dimen/main_text_size</item>
     </style>
 
 </resources>

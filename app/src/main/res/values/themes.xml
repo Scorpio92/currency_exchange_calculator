@@ -7,10 +7,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="buttonStyle">@style/ButtonStyle</item>
-        <item name="android:dropDownListViewStyle">@style/DropDownListViewStyle</item>
-        <!--<item name="popupMenuStyle">@style/PopupMenuStyle</item>
-        <item name="android:popupMenuStyle">@style/PopupMenuStyle</item>-->
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
     </style>
 
     <style name="EastBankTheme.NoActionBar">
