@@ -1,10 +1,9 @@
 package ru.scorpio92.excalc;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,7 +23,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     EditText inputField1;
     EditText inputField2;
@@ -51,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.content_main);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -309,9 +308,9 @@ public class MainActivity extends AppCompatActivity {
 
             TableLayout tl = (TableLayout) findViewById(R.id.baseTable);
 
-            currencyButtonsIDArray = new ArrayList<>();
-            purchaseTextIDArray = new ArrayList<>();
-            saleTextIDArray = new ArrayList<>();
+            currencyButtonsIDArray = new ArrayList<Integer>();
+            purchaseTextIDArray = new ArrayList<Integer>();
+            saleTextIDArray = new ArrayList<Integer>();
 
             for(int i=0; i<result.size(); i=i+3) {
                 TableRow tr = new TableRow(this);
