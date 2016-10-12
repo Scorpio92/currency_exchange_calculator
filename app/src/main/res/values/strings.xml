@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">excalc</string>
+    <string name="app_name">Калькулятор обмена валюты</string>
     <string name="action_settings">Settings</string>
     <string name="topTitle">Выберите операцию и валюту</string>
     <string name="purchaseButtonText">Покупка</string>

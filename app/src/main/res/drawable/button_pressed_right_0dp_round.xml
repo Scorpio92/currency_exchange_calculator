@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
-    <solid android:color="@color/colorPrimaryDark"/> <!-- this one is ths color of the Rounded Button -->
-    <stroke android:width="2dp" android:color="@color/colorPrimaryDark" />
+    <solid android:color="@color/colorVostbankBlue"/> <!-- this one is ths color of the Rounded Button -->
+    <stroke android:width="2dp" android:color="@color/colorVostbankBlue" />
     <corners
         android:bottomRightRadius="0dp"
         android:bottomLeftRadius="@dimen/button_radius"

@@ -1,5 +1,6 @@
 package ru.scorpio92.excalc;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,11 +8,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Space;
@@ -27,8 +25,6 @@ public class MainActivity extends Activity {
 
     EditText inputField1;
     EditText inputField2;
-    /*Button currencyButton1;
-    Button currencyButton2;*/
     TextView currency1;
     TextView currency2;
     Button purchaseButton;
@@ -38,8 +34,6 @@ public class MainActivity extends Activity {
 
     int activeInputFieldID;
     int activeOperation;
-    /*String inputField1ExchangeCurrency;
-    String inputField2ExchangeCurrency;*/
     String activeExchangeCurrency;
     int activeExchangeCurrencyButtonID;
 
@@ -51,43 +45,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getActionBar().setCustomView(R.layout.action_bar);
 
         init();
-
-        //Log.w("test", String.format("%(.4f", BigDecimal.valueOf(1000/64.10)));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     void init() {
@@ -125,7 +87,11 @@ public class MainActivity extends Activity {
             public void afterTextChanged(Editable s) {
                 if(activeInputFieldID == inputField1.getId()) {
                     Log.w("TextWatcher", "inputField1 afterTextChanged " + s);
-                    calc();
+                    if(s.length() > 0) {
+                        calc();
+                    } else {
+                        inputField2.setText("");
+                    }
                 }
             }
 
@@ -146,7 +112,11 @@ public class MainActivity extends Activity {
             public void afterTextChanged(Editable s) {
                 if(activeInputFieldID == inputField2.getId()) {
                     Log.w("TextWatcher", "inputField2 afterTextChanged " + s);
-                    calc();
+                    if(s.length() > 0) {
+                        calc();
+                    } else {
+                        inputField1.setText("");
+                    }
                 }
             }
 
@@ -185,14 +155,17 @@ public class MainActivity extends Activity {
 
                 //выделяем курсы валют цветом
                 try {
+                    TextView t;
                     for (int id : saleTextIDArray) {
-                        TextView t = (TextView) MainActivity.this.findViewById(id);
-                        t.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        t = (TextView) MainActivity.this.findViewById(id);
+                        t.setTextColor(getResources().getColor(R.color.colorVostbankBlue));
                     }
                     for (int id : purchaseTextIDArray) {
-                        TextView t = (TextView) MainActivity.this.findViewById(id);
-                        t.setTextColor(getResources().getColor(R.color.colorTextDark));
+                        t = (TextView) MainActivity.this.findViewById(id);
+                        t.setTextColor(getResources().getColor(R.color.colorTextNormal));
                     }
+                    t = (TextView) MainActivity.this.findViewById(saleTextIDArray.get(activeExchangeCurrencyButtonID));
+                    t.setTextColor(getResources().getColor(R.color.colorVostbankRed));
                 } catch (Exception e) {e.printStackTrace();}
                 calc();
             }
@@ -212,14 +185,17 @@ public class MainActivity extends Activity {
 
                 //выделяем курсы валют цветом
                 try {
+                    TextView t;
                     for (int id : purchaseTextIDArray) {
-                        TextView t = (TextView) MainActivity.this.findViewById(id);
-                        t.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        t = (TextView) MainActivity.this.findViewById(id);
+                        t.setTextColor(getResources().getColor(R.color.colorVostbankBlue));
                     }
                     for (int id : saleTextIDArray) {
-                        TextView t = (TextView) MainActivity.this.findViewById(id);
-                        t.setTextColor(getResources().getColor(R.color.colorTextDark));
+                        t = (TextView) MainActivity.this.findViewById(id);
+                        t.setTextColor(getResources().getColor(R.color.colorTextNormal));
                     }
+                    t = (TextView) MainActivity.this.findViewById(purchaseTextIDArray.get(activeExchangeCurrencyButtonID));
+                    t.setTextColor(getResources().getColor(R.color.colorVostbankRed));
                 } catch (Exception e) {e.printStackTrace();}
                 calc();
             }
@@ -312,6 +288,7 @@ public class MainActivity extends Activity {
             purchaseTextIDArray = new ArrayList<Integer>();
             saleTextIDArray = new ArrayList<Integer>();
 
+            int j =0;
             for(int i=0; i<result.size(); i=i+3) {
                 TableRow tr = new TableRow(this);
                 TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
@@ -319,21 +296,12 @@ public class MainActivity extends Activity {
                 tr.setGravity(Gravity.CENTER_HORIZONTAL);
                 tr.setPadding(0, 20, 0, 0);
 
-
-                /*TextView currency = new TextView(this);
-                currency.setText(result.get(i));
-                currency.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
-                tr.addView(currency);*/
-
-                //ContextThemeWrapper contextThemeWrapper = new ContextThemeWrapper(this, R.style.ButtonStyle);
                 final Button currency = new Button(this);
                 currency.setText(result.get(i));
                 currency.setBackgroundResource(R.drawable.custom_button_style);
-                //currency.setTextAppearance(this,R.style.ButtonStyle);
-                //currency.setMinHeight(10);
-                //currency.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-                currency.setId(i);
-                currencyButtonsIDArray.add(i);
+                currency.setId(j);
+                currencyButtonsIDArray.add(j);
+                j++;
                 if(result.get(i).equals(Constants.CURRENCY_DEFAULT))
                     activeExchangeCurrencyButtonID = i;
                 currency.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
@@ -345,13 +313,27 @@ public class MainActivity extends Activity {
                     @Override
                     public void onClick(View view) {
                         activeExchangeCurrency = ((Button) view).getText().toString();
+                        activeExchangeCurrencyButtonID = view.getId();
 
+                        TextView t;
                         if(activeOperation == Constants.OPERATION_PURCHASE) {
                             currency1.setText(Constants.CURRENCY_RUB);
                             currency2.setText(activeExchangeCurrency);
+                            for (int id : purchaseTextIDArray) {
+                                t = (TextView) MainActivity.this.findViewById(id);
+                                t.setTextColor(getResources().getColor(R.color.colorVostbankBlue));
+                            }
+                            t = (TextView) MainActivity.this.findViewById(purchaseTextIDArray.get(activeExchangeCurrencyButtonID));
+                            t.setTextColor(getResources().getColor(R.color.colorVostbankRed));
                         } else {
                             currency1.setText(activeExchangeCurrency);
                             currency2.setText(Constants.CURRENCY_RUB);
+                            for (int id : saleTextIDArray) {
+                                t = (TextView) MainActivity.this.findViewById(id);
+                                t.setTextColor(getResources().getColor(R.color.colorVostbankBlue));
+                            }
+                            t = (TextView) MainActivity.this.findViewById(saleTextIDArray.get(activeExchangeCurrencyButtonID));
+                            t.setTextColor(getResources().getColor(R.color.colorVostbankRed));
                         }
 
                         for (int id: currencyButtonsIDArray) {
@@ -362,22 +344,21 @@ public class MainActivity extends Activity {
                         currency.setTextColor(getResources().getColor(R.color.colorTextLight));
                         currency.setBackgroundResource(R.drawable.button_pressed);
                         calc();
-                        //Toast.makeText(getApplicationContext(), activeExchangeCurrency, Toast.LENGTH_SHORT).show();
                     }
                 });
 
                 TextView sale = new TextView(this);
                 sale.setText(result.get(i+1));
-                sale.setId(i + result.size()*2);
-                saleTextIDArray.add(i + result.size()*2);
+                sale.setId(i + result.size());
+                saleTextIDArray.add(i + result.size());
                 sale.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
                 sale.setGravity(Gravity.CENTER_HORIZONTAL);
                 tr.addView(sale);
 
                 TextView purchase = new TextView(this);
                 purchase.setText(result.get(i+2));
-                purchase.setId(i + result.size());
-                purchaseTextIDArray.add(i + result.size());
+                purchase.setId(i + result.size()*2);
+                purchaseTextIDArray.add(i + result.size()*2);
                 purchase.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f));
                 purchase.setGravity(Gravity.CENTER_HORIZONTAL);
                 tr.addView(purchase);
@@ -397,9 +378,7 @@ public class MainActivity extends Activity {
     }
 
     //расчет курса обмена
-    //double calc(int operation, double sum, String currency) {
     void calc() {
-        //String currency;
         double sum;
         double resultSum = -1;
 
@@ -455,37 +434,57 @@ public class MainActivity extends Activity {
                 }
             }
 
+            String[] mas;
+            String nullString = "";
+            int i = 0;
+            while (i<Integer.valueOf(Constants.SUM_ROUND)) {
+                nullString += "0";
+                i++;
+            }
+
             if (activeInputFieldID == inputField1.getId()) {
                 inputField2.setText(String.format("%(." + Constants.SUM_ROUND + "f", resultSum).replace(",", "."));
+                mas = inputField2.getText().toString().split("\\.");
+                if(nullString.equals(mas[1])) {
+                    inputField2.setText(mas[0]);
+                }
             } else {
                 inputField1.setText(String.format("%(." + Constants.SUM_ROUND + "f", resultSum).replace(",", "."));
+                mas = inputField1.getText().toString().split("\\.");
+                if(nullString.equals(mas[1])) {
+                    inputField1.setText(mas[0]);
+                }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //return resultSum;
     }
 
     void setDefaults() {
-
+        TextView t;
         currency1.setText(Constants.CURRENCY_RUB);
         currency2.setText(Constants.CURRENCY_DEFAULT);
 
         //по-умолчанию - операция покупка
+        activeOperation = Constants.OPERATION_PURCHASE;
         purchaseButton.setTextColor(getResources().getColor(R.color.colorTextLight));
         purchaseButton.setBackground(getResources().getDrawable(R.drawable.button_pressed_left_0dp_round));
-        activeOperation = Constants.OPERATION_PURCHASE;
+
         //выделяем курсы валют цветом
         try {
             for (int id : purchaseTextIDArray) {
-                TextView t = (TextView) MainActivity.this.findViewById(id);
-                t.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                t = (TextView) MainActivity.this.findViewById(id);
+                t.setTextColor(getResources().getColor(R.color.colorVostbankBlue));
             }
             for (int id : saleTextIDArray) {
-                TextView t = (TextView) MainActivity.this.findViewById(id);
-                t.setTextColor(getResources().getColor(R.color.colorTextDark));
+                t = (TextView) MainActivity.this.findViewById(id);
+                t.setTextColor(getResources().getColor(R.color.colorTextNormal));
             }
+        } catch (Exception e) {e.printStackTrace();}
+        try {
+            t = (TextView) MainActivity.this.findViewById(purchaseTextIDArray.get(activeExchangeCurrencyButtonID));
+            t.setTextColor(getResources().getColor(R.color.colorVostbankRed));
         } catch (Exception e) {e.printStackTrace();}
 
         //валюта по-умолчанию
